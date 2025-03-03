@@ -31,7 +31,11 @@ const unsigned frequency_ms = 100; //Pulse width for relays
 
 unsigned long currentMillis;
 unsigned long time;
-unsigned long blowTime;
+unsigned long blowTime = 200;
+boolean inA = false;
+boolean inB = false;
+boolean inY = false;
+boolean inX = false;
 
 void setup() {
         delay(1000);
@@ -76,39 +80,49 @@ void loop() {
 
   if(lf310.connected()){
 
-    if(lf310.buttonClickState.Abutton && time + blowTime > currentMillis){
+    if(lf310.buttonClickState.Abutton && !inA){
       digitalWrite(valvePin1, LOW);
       Serial.println("A");
       time = currentMillis;
-      //lf310.buttonClickState.Abutton = 0;
-    } else if (time + blowTime > currentMillis){
+      inA=true;
+      lf310.buttonClickState.Abutton = 0;
+      delay(blowTime);
       digitalWrite(valvePin1, HIGH);
     }
+    if(lf310.buttonClickState.LBbutton){
+      inA=false;
+      inB=false;
+      inY=false;
+      inX=false;
+    }
 
-    if(lf310.buttonClickState.Bbutton && time + blowTime > currentMillis){
+    if(lf310.buttonClickState.Bbutton && !inB){
       digitalWrite(valvePin2, LOW);
       Serial.println("B");
       time = currentMillis;
-      //lf310.buttonClickState.Bbutton = 0;
-    } else if (time + blowTime > currentMillis){
-      digitalWrite(valvePin2, HIGH);
+      inB=true;
+      lf310.buttonClickState.Bbutton = 0;
+      delay(blowTime);
+      digitalWrite(valvePin2, HIGH); 
     }
 
-    if(lf310.buttonClickState.Ybutton && time + blowTime > currentMillis){
+    if(lf310.buttonClickState.Ybutton && !inY){
       digitalWrite(valvePin3, LOW);
       Serial.println("Y");
       time = currentMillis;
-      //lf310.buttonClickState.Ybutton = 0;
-    } else if (time + blowTime > currentMillis){
-      digitalWrite(valvePin3, HIGH);
+      inY=true;
+      lf310.buttonClickState.Ybutton = 0;
+      delay(blowTime);
+      digitalWrite(valvePin3, HIGH); 
     }
 
-    if(lf310.buttonClickState.Abutton && time + blowTime > currentMillis){
+    if(lf310.buttonClickState.Xbutton && !inX){
       digitalWrite(valvePin4, LOW);
       Serial.println("X");
       time = currentMillis;
-      //lf310.buttonClickState.Xbutton = 0;
-    } else if (time + blowTime > currentMillis){
+      inX=true;
+      lf310.buttonClickState.Xbutton = 0;
+      delay(blowTime);
       digitalWrite(valvePin4, HIGH);
     }
 
